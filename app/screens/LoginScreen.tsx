@@ -17,8 +17,8 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView>
-      <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
+      <View style={styles.container}>
         <Ionicons name="film-outline" size={32} style={styles.icon} />
         <Text style={styles.title}>Movie Mobile App</Text>
       </View>
@@ -36,7 +36,7 @@ const LoginScreen = () => {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push("/screens/Profile")}
+              onPress={() => router.push("/screens/MoviesList")}
             >
               <Text style={styles.buttonText}>Sign in with your </Text>
               <Image
