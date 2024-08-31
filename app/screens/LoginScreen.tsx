@@ -55,11 +55,11 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "black",
-    height: 80,
+    height: 90,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-end",
     flexDirection: "row",
-    marginTop: 10,
+    paddingBottom: 10
   },
   title: {
     fontSize: 28,
