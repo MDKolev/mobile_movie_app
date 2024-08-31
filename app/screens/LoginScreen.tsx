@@ -40,7 +40,7 @@ const LoginScreen = () => {
             >
               <Text style={styles.buttonText}>Sign in with your </Text>
               <Image
-                source={require("../../assets/images/facebook_logo.png")}
+                source={require("../../assets/images/google_logo.png")}
                 style={styles.buttonImage}
               />
               <Text style={styles.buttonText}> account</Text>
