@@ -1,8 +1,17 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import FooterNav from '../FooterNav';
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import FooterNav from "../components/FooterNav";
 
 interface Movie {
   id: string;
@@ -14,74 +23,74 @@ interface Movie {
 
 const movies: Movie[] = [
   {
-    id: '1',
-    title: 'Inception',
+    id: "1",
+    title: "Inception",
     year: 2010,
-    genre: 'Science Fiction',
-    coverImage: require('../../assets/images/inception.jpg'),
+    genre: "Science Fiction",
+    coverImage: require("../../assets/images/inception.jpg"),
   },
   {
-    id: '2',
-    title: 'The Dark Knight',
+    id: "2",
+    title: "The Dark Knight",
     year: 2008,
-    genre: 'Action',
-    coverImage: require('../../assets/images/dark_knight.jpg'),
+    genre: "Action",
+    coverImage: require("../../assets/images/dark_knight.jpg"),
   },
   {
-    id: '3',
-    title: 'Interstellar',
+    id: "3",
+    title: "Interstellar",
     year: 2014,
-    genre: 'Science Fiction',
-    coverImage: require('../../assets/images/interstellar.jpg'),
+    genre: "Science Fiction",
+    coverImage: require("../../assets/images/interstellar.jpg"),
   },
   {
-    id: '4',
-    title: 'Gladiator',
+    id: "4",
+    title: "Gladiator",
     year: 2000,
-    genre: 'Action',
-    coverImage: require('../../assets/images/gladiator.jpg'),
+    genre: "Action",
+    coverImage: require("../../assets/images/gladiator.jpg"),
   },
   {
-    id: '5',
-    title: 'The Godfather',
+    id: "5",
+    title: "The Godfather",
     year: 1972,
-    genre: 'Crime',
-    coverImage: require('../../assets/images/godfather.jpg'),
+    genre: "Crime",
+    coverImage: require("../../assets/images/godfather.jpg"),
   },
   {
-    id: '6',
-    title: 'Pulp Fiction',
+    id: "6",
+    title: "Pulp Fiction",
     year: 1994,
-    genre: 'Crime',
-    coverImage: require('../../assets/images/pulp_fiction.jpg'),
+    genre: "Crime",
+    coverImage: require("../../assets/images/pulp_fiction.jpg"),
   },
   {
-    id: '7',
-    title: 'The Matrix',
+    id: "7",
+    title: "The Matrix",
     year: 1999,
-    genre: 'Science Fiction',
-    coverImage: require('../../assets/images/matrix.jpg'),
+    genre: "Science Fiction",
+    coverImage: require("../../assets/images/matrix.jpg"),
   },
   {
-    id: '8',
-    title: 'Fight Club',
+    id: "8",
+    title: "Fight Club",
     year: 1999,
-    genre: 'Drama',
-    coverImage: require('../../assets/images/fight_club.jpg'),
+    genre: "Drama",
+    coverImage: require("../../assets/images/fight_club.jpg"),
   },
   {
-    id: '9',
-    title: 'Forrest Gump',
+    id: "9",
+    title: "Forrest Gump",
     year: 1994,
-    genre: 'Drama',
-    coverImage: require('../../assets/images/forest_gump.jpg'),
+    genre: "Drama",
+    coverImage: require("../../assets/images/forest_gump.jpg"),
   },
   {
-    id: '10',
-    title: 'The Shawshank Redemption',
+    id: "10",
+    title: "The Shawshank Redemption",
     year: 1994,
-    genre: 'Drama',
-    coverImage: require('../../assets/images/shawshank.jpg'),
+    genre: "Drama",
+    coverImage: require("../../assets/images/shawshank.jpg"),
   },
 ];
 
@@ -93,7 +102,9 @@ const MoviesList: React.FC = () => {
       <Image source={item.coverImage} style={styles.coverImage} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.details}>{item.year} | {item.genre}</Text>
+        <Text style={styles.details}>
+          {item.year} | {item.genre}
+        </Text>
       </View>
     </View>
   );
@@ -102,9 +113,12 @@ const MoviesList: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       {/* StatusBar customization */}
       <StatusBar barStyle="light-content" backgroundColor="#333" />
-      
+
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Available movies</Text>
@@ -115,7 +129,7 @@ const MoviesList: React.FC = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
       />
-      <FooterNav/>
+      <FooterNav />
     </SafeAreaView>
   );
 };
@@ -123,36 +137,36 @@ const MoviesList: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   header: {
     padding: 10,
-    backgroundColor: '#333',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 15, 
+    backgroundColor: "#333",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 15,
   },
   backButton: {
     width: 40,
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerTitle: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   list: {
     padding: 10,
   },
   movieContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 15,
     borderRadius: 8,
-    overflow: 'hidden',
-    backgroundColor: '#222',
+    overflow: "hidden",
+    backgroundColor: "#222",
     elevation: 3,
   },
   coverImage: {
@@ -161,17 +175,17 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 10,
   },
   title: {
     fontSize: 20,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   details: {
     fontSize: 16,
-    color: '#ccc',
+    color: "#ccc",
   },
 });
 
