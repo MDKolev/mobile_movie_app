@@ -6,6 +6,7 @@ export default function Layout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="screens/MoviesList" options={{ headerShown: false}} />
       <Stack.Screen name="screens/MovieDetails" options={{ headerShown: false}} />
+      <Stack.Screen name="screens/Profile" options={{ headerShown: false}} />
     </Stack>
   );
 }
