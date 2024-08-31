@@ -6,10 +6,8 @@ import {
   StyleSheet,
   FlatList,
   SafeAreaView,
-  TouchableOpacity,
   StatusBar,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FooterNav from "../components/FooterNav";
 
@@ -111,16 +109,9 @@ const MoviesList: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* StatusBar customization */}
-      <StatusBar barStyle="light-content" backgroundColor="#333" />
+      <StatusBar barStyle="light-content" backgroundColor="black" />
 
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Available movies</Text>
       </View>
       <FlatList
@@ -141,11 +132,9 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 10,
-    backgroundColor: "#333",
-    flexDirection: "row",
+    backgroundColor: "black",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 15,
+    marginTop: 30,
   },
   backButton: {
     width: 40,
@@ -154,9 +143,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: {
-    color: "#fff",
-    fontSize: 22,
+    color: "yellow",
+    fontSize: 40,
     fontWeight: "bold",
+    textDecorationLine: 'underline'
   },
   list: {
     padding: 10,
