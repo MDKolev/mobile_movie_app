@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import FooterNav from '../FooterNav';
 
 interface Movie {
   id: string;
@@ -114,6 +115,7 @@ const MoviesList: React.FC = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
       />
+      <FooterNav/>
     </SafeAreaView>
   );
 };

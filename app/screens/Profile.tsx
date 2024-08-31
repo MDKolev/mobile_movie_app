@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import { FullWindowOverlay } from "react-native-screens";
+import FooterNav from "../FooterNav";
 
 const Profile: React.FC = () => {
   // Dummy user data
@@ -46,6 +47,7 @@ const Profile: React.FC = () => {
           <Button title="Logout" color="#ff5c5c" onPress={handleLogout} />
         </View>
       </View>
+      <FooterNav/>
     </SafeAreaView>
   );
 };
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 80,
+    marginBottom: 45,
     width: "80%",
   },
   title: {
