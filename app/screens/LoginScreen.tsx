@@ -36,7 +36,7 @@ const LoginScreen = () => {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push("/screens/MoviesList")}
+              onPress={() => router.push("/screens/MovieDetails")}
             >
               <Text style={styles.buttonText}>Sign in with your </Text>
               <Image
