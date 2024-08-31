@@ -57,9 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   container: {
+    flex: 1,
     padding: 20,
     alignItems: "center",
     marginTop: 30,
+    justifyContent: 'space-between'
   },
   label: {
     fontSize: 22,
@@ -72,8 +74,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   logoutButton: {
-    marginTop: 80,
-    marginBottom: 30,
     width: "80%",
   },
   title: {
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
     textDecorationLine: "underline",
-    marginBottom: 50,
   },
   infos: {
     alignItems: "center",
