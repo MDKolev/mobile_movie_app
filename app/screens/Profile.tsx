@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
   View,
@@ -8,8 +7,8 @@ import {
   Button,
   Image,
 } from "react-native";
-import { FullWindowOverlay } from "react-native-screens";
 import FooterNav from "../components/FooterNav";
+import CustomButton from "../components/CustomButton";
 
 const Profile: React.FC = () => {
   // Dummy user data
@@ -44,7 +43,7 @@ const Profile: React.FC = () => {
         </View>
 
         <View style={styles.logoutButton}>
-          <Button title="Logout" color="#ff5c5c" onPress={handleLogout} />
+          <CustomButton title="Logout" onPress={handleLogout}></CustomButton>
         </View>
       </View>
       <FooterNav />
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 80,
-    marginBottom: 45,
+    marginBottom: 30,
     width: "80%",
   },
   title: {
