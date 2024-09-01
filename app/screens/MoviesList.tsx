@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,99 +7,51 @@ import {
   FlatList,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FooterNav from "../components/FooterNav";
+import axios from "axios";
 
 interface Movie {
   id: string;
-  title: string;
+  name: string;
   year: number;
   genre: string;
-  coverImage: any;
+  cover_photo_url: string;
+  resume: string;
 }
 
-const movies: Movie[] = [
-  {
-    id: "1",
-    title: "Inception",
-    year: 2010,
-    genre: "Science Fiction",
-    coverImage: require("../../assets/images/inception.jpg"),
-  },
-  {
-    id: "2",
-    title: "The Dark Knight",
-    year: 2008,
-    genre: "Action",
-    coverImage: require("../../assets/images/dark_knight.jpg"),
-  },
-  {
-    id: "3",
-    title: "Interstellar",
-    year: 2014,
-    genre: "Science Fiction",
-    coverImage: require("../../assets/images/interstellar.jpg"),
-  },
-  {
-    id: "4",
-    title: "Gladiator",
-    year: 2000,
-    genre: "Action",
-    coverImage: require("../../assets/images/gladiator.jpg"),
-  },
-  {
-    id: "5",
-    title: "The Godfather",
-    year: 1972,
-    genre: "Crime",
-    coverImage: require("../../assets/images/godfather.jpg"),
-  },
-  {
-    id: "6",
-    title: "Pulp Fiction",
-    year: 1994,
-    genre: "Crime",
-    coverImage: require("../../assets/images/pulp_fiction.jpg"),
-  },
-  {
-    id: "7",
-    title: "The Matrix",
-    year: 1999,
-    genre: "Science Fiction",
-    coverImage: require("../../assets/images/matrix.jpg"),
-  },
-  {
-    id: "8",
-    title: "Fight Club",
-    year: 1999,
-    genre: "Drama",
-    coverImage: require("../../assets/images/fight_club.jpg"),
-  },
-  {
-    id: "9",
-    title: "Forrest Gump",
-    year: 1994,
-    genre: "Drama",
-    coverImage: require("../../assets/images/forest_gump.jpg"),
-  },
-  {
-    id: "10",
-    title: "The Shawshank Redemption",
-    year: 1994,
-    genre: "Drama",
-    coverImage: require("../../assets/images/shawshank.jpg"),
-  },
-];
-
 const MoviesList: React.FC = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get("http://10.0.2.2:8000/api/movies");
+        console.log(response.data);
+        setMovies(response.data);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovies();
+  }, []);
 
   const renderItem = ({ item }: { item: Movie }) => (
     <View style={styles.movieContainer}>
-      <Image source={item.coverImage} style={styles.coverImage} />
+      <Image
+        source={{ uri: item.cover_photo_url }}
+        style={styles.coverImage}
+        resizeMode="cover"
+      />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.details}>
           {item.year} | {item.genre}
         </Text>
@@ -114,12 +66,20 @@ const MoviesList: React.FC = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Available movies</Text>
       </View>
-      <FlatList
-        data={movies}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-      />
+
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      ) : (
+        <FlatList
+          data={movies}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.list}
+        />
+      )}
+
       <FooterNav />
     </SafeAreaView>
   );
@@ -136,17 +96,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
   },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   headerTitle: {
     color: "yellow",
     fontSize: 40,
     fontWeight: "bold",
-    textDecorationLine: 'underline'
+    textDecorationLine: "underline",
+  },
+  loaderContainer: {
+    marginTop: 20, // Adds space between the title and the loader
+    alignItems: "center", // Centers the loader horizontally
   },
   list: {
     padding: 10,
