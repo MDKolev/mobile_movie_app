@@ -35,13 +35,18 @@ const MovieDetails: React.FC = () => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:8000/api/movies/${id}`);
-        setMovie(response.data);
-        console.log(response.data);
+        const response = await fetch(`http://10.0.2.2:8000/api/movies/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json(); 
+        setMovie(data); 
+        console.log(data); 
       } catch (error) {
         console.error("Error fetching movie details:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 

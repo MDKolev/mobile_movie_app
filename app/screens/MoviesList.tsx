@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import FooterNav from "../components/FooterNav";
 
 interface Movie {
@@ -31,10 +30,14 @@ const MoviesList: React.FC = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get("http://10.0.2.2:8000/api/movies");
-        setMovies(response.data);
+        const response = await fetch('http://10.0.2.2:8000/api/movies');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setMovies(data);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error('Error fetching movies:', error);
       } finally {
         setLoading(false);
       }
