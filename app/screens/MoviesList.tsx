@@ -8,10 +8,11 @@ import {
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import FooterNav from "../components/FooterNav";
 import axios from "axios";
+import FooterNav from "../components/FooterNav";
 
 interface Movie {
   id: string;
@@ -31,7 +32,6 @@ const MoviesList: React.FC = () => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get("http://10.0.2.2:8000/api/movies");
-        console.log(response.data);
         setMovies(response.data);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -43,21 +43,37 @@ const MoviesList: React.FC = () => {
     fetchMovies();
   }, []);
 
+  const handlePress = (movieId: string) => {
+    navigation.navigate("screens/MovieDetails", { id: movieId });
+  };
+
   const renderItem = ({ item }: { item: Movie }) => (
-    <View style={styles.movieContainer}>
-      <Image
-        source={{ uri: item.cover_photo_url }}
-        style={styles.coverImage}
-        resizeMode="cover"
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.details}>
-          {item.year} | {item.genre}
-        </Text>
+    <TouchableOpacity onPress={() => handlePress(item.id)}>
+      <View style={styles.movieContainer}>
+        <Image
+          source={{ uri: item.cover_photo_url }}
+          style={styles.coverImage}
+          resizeMode="cover"
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.details}>
+            {item.year} | {item.genre}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -67,18 +83,12 @@ const MoviesList: React.FC = () => {
         <Text style={styles.headerTitle}>Available movies</Text>
       </View>
 
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#fff" />
-        </View>
-      ) : (
-        <FlatList
-          data={movies}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.list}
-        />
-      )}
+      <FlatList
+        data={movies}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.list}
+      />
 
       <FooterNav />
     </SafeAreaView>
@@ -101,10 +111,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
     textDecorationLine: "underline",
-  },
-  loaderContainer: {
-    marginTop: 20, // Adds space between the title and the loader
-    alignItems: "center", // Centers the loader horizontally
   },
   list: {
     padding: 10,
@@ -134,6 +140,11 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 16,
     color: "#ccc",
+  },
+  loaderContainer: {
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
   },
 });
 

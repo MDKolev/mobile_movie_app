@@ -1,7 +1,6 @@
-// File path: src/components/MovieDetails.tsx
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
-import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -9,23 +8,69 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import axios from "axios";
+
+interface Movie {
+  id: string;
+  name: string;
+  year: number;
+  genre: string;
+  cover_photo_url: string;
+  resume: string;
+  added_on: string;
+}
 
 const MovieDetails: React.FC = () => {
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isFavourite, setFavourite] = useState(false);
 
-  const movie = {
-    title: "Inception",
-    year: 2010,
-    genre: "Science Fiction",
-    coverImage: require("../../assets/images/inception.jpg"),
-    resume:
-      "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
-    dateAdded: "2024-09-01",
-  };
-
   const navigation = useNavigation();
+  const route = useRoute();
+  const { id } = route.params as { id: string };
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        const response = await axios.get(`http://10.0.2.2:8000/api/movies/${id}`);
+        setMovie(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovieDetails();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!movie) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.error}>Movie not found</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -45,13 +90,16 @@ const MovieDetails: React.FC = () => {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.container}>
-        <Image source={movie.coverImage} style={styles.coverImage} />
-        <Text style={styles.title}>{movie.title}</Text>
+        <Image
+          source={{ uri: movie.cover_photo_url }}
+          style={styles.coverImage}
+        />
+        <Text style={styles.title}>{movie.name}</Text>
         <Text style={styles.details}>
           {movie.year} | {movie.genre}
         </Text>
         <Text style={styles.resume}>{movie.resume}</Text>
-        <Text style={styles.dateAdded}>Added on: {movie.dateAdded}</Text>
+        <Text style={styles.addedOn}>Added on: {movie.added_on}</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -61,6 +109,11 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#000",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     padding: 20,
@@ -91,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  dateAdded: {
+  addedOn: {
     fontSize: 14,
     color: "#888",
     textAlign: "center",
@@ -110,10 +163,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  headerTitle: {
-    color: "white",
-    fontSize: 22,
-    fontWeight: "bold",
+  error: {
+    color: "#fff",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 
