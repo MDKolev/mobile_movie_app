@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
@@ -11,9 +11,58 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
+  // 73835811828-1ih1iigdobq9qsoecmb33egdee2kmgus.apps.googleusercontent.com
+
+  const [userInfo, setUserInfo] = useState(null);
   const router = useRouter();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "73835811828-1ih1iigdobq9qsoecmb33egdee2kmgus.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    handleSignInWithGoogle();
+  }, [response])
+
+  const handleSignInWithGoogle = async () => {
+    const user = await AsyncStorage.getItem("@user");
+
+    if (!user) {
+      if (response?.type === "success") {
+        await getUserInfo(response.authentication?.accessToken);
+        router.push("/screens/MoviesList");
+      }
+      console.log(user);
+      
+    } else {
+      setUserInfo(JSON.parse(user));
+    }
+  };
+
+  const getUserInfo = async (token: any) => {
+    if (!token) return;
+
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      console.log(user);
+      setUserInfo(user);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -36,11 +85,11 @@ const LoginScreen = () => {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push("/screens/MoviesList")}
+              onPress={() => promptAsync()}
             >
               <Text style={styles.buttonText}>Sign in with your </Text>
               <Image
-                source={require("../../assets/images/facebook_logo.png")}
+                source={require("../../assets/images/google_logo.png")}
                 style={styles.buttonImage}
               />
               <Text style={styles.buttonText}> account</Text>
@@ -59,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
     flexDirection: "row",
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   title: {
     fontSize: 28,
