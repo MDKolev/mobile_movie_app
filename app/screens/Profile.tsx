@@ -1,27 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
-  Button,
   Image,
+  Alert
 } from "react-native";
 import FooterNav from "../components/FooterNav";
 import CustomButton from "../components/CustomButton";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile: React.FC = () => {
-  // Dummy user data
-  const user = {
-    email: "johndoe@example.com",
-    username: "johndoe",
-    fullName: "John Doe",
+  const [user, setUser] = useState({
+    email: "",
+    username: "",
+    name: "",
+    picture: ""
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("@user");
+        if (userData) {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error("Failed to load user data", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("@user");
+      router.dismissAll();
+      Alert.alert("Logout successful!")
+    } catch (error) {
+      console.error("Failed to log out", error);
+      Alert.alert("Logout Error", "Failed to log out. Please try again.");
+    }
   };
 
-  const handleLogout = () => {
-    // Logic for logging out the user (e.g., clearing tokens, navigating to the login screen, etc.)
-    console.log("User logged out");
-  };
+  if (!user.email) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -29,21 +63,21 @@ const Profile: React.FC = () => {
         <Text style={styles.title}>Your Profile</Text>
         <View style={styles.infos}>
           <Image
-            source={require("../../assets/images/profile-pic.jpeg")}
+            source={user.picture ? { uri: user.picture } : require("../../assets/images/profile-pic.jpeg")}
             style={styles.profileImage}
-          ></Image>
-          <Text style={styles.label}> Email:</Text>
+          />
+          <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>{user.email}</Text>
 
           <Text style={styles.label}>Username:</Text>
-          <Text style={styles.value}>{user.username}</Text>
+          <Text style={styles.value}>{user.username || "<no-username>"}</Text>
 
           <Text style={styles.label}>Full Name:</Text>
-          <Text style={styles.value}>{user.fullName}</Text>
+          <Text style={styles.value}>{user.name}</Text>
         </View>
 
         <View style={styles.logoutButton}>
-          <CustomButton title="Logout" onPress={handleLogout}></CustomButton>
+          <CustomButton title="Logout" onPress={handleLogout} />
         </View>
       </View>
       <FooterNav />
@@ -86,7 +120,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    borderRadius: 30,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
 });
 
