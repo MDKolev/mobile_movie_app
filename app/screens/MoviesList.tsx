@@ -86,12 +86,18 @@ const MoviesList: React.FC = () => {
         <Text style={styles.headerTitle}>Available movies</Text>
       </View>
 
-      <FlatList
-        data={movies}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.list}
-      />
+      {movies.length === 0 ? (
+        <View style={styles.noMoviesContainer}>
+          <Text style={styles.noMoviesText}>No movies available</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={movies}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.list}
+        />
+      )}
 
       <FooterNav />
     </SafeAreaView>
@@ -148,6 +154,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noMoviesContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noMoviesText: {
+    color: "#fff",
+    fontSize: 18,
   },
 });
 
