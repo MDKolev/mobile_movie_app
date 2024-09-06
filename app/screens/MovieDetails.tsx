@@ -11,7 +11,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import axios from "axios";
 
 interface Movie {
   id: string;

@@ -1,8 +1,7 @@
-
 export type RootStackParamList = {
   index: undefined;
   MoviesList: undefined;
-  MovieDetails: { movie: Movie }; // Define the type for MovieDetails screen
+  MovieDetails: { movie: Movie }; 
 };
 
 export interface Movie {

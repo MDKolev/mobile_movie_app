@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mobile-app-movie",
-    "slug": "mobile-app-movie",
+    "slug": "movie-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5437f699-1636-4013-bc18-c01a026fed86"
+      }
+    },
+    "owner": "mdkolev"
   }
 }
