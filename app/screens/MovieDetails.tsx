@@ -38,10 +38,8 @@ const MovieDetails: React.FC = () => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-    
-        const data = await response.json(); 
+        const data = await response.json();
         setMovie(data); 
-        console.log(data); 
       } catch (error) {
         console.error("Error fetching movie details:", error);
       } finally {
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
   },
   coverImage: {
     width: "100%",
-    height: 500,
+    height: 550,
     marginBottom: 20,
     borderRadius: 10,
   },

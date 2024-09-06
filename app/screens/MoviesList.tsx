@@ -25,27 +25,27 @@ interface Movie {
 const MoviesList: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('http://10.0.2.2:8000/api/movies');
+        const response = await fetch("http://10.0.2.2:8000/api/movies");
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setMovies(data);
       } catch (error) {
-        console.error('Error fetching movies:', error);
+        console.error("Error fetching movies:", error);
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchMovies();
   }, []);
-
+  
   const handlePress = (movieId: string) => {
     navigation.navigate("screens/MovieDetails", { id: movieId });
   };
@@ -145,9 +145,9 @@ const styles = StyleSheet.create({
     color: "#ccc",
   },
   loaderContainer: {
-    flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center", 
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

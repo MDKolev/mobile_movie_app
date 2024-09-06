@@ -63,7 +63,7 @@ const Profile: React.FC = () => {
         <Text style={styles.title}>Your Profile</Text>
         <View style={styles.infos}>
           <Image
-            source={user.picture ? { uri: user.picture } : require("../../assets/images/profile-pic.jpeg")}
+            source={user.picture ? { uri: user.picture } : require("@/assets/images/profile-pic.jpeg")}
             style={styles.profileImage}
           />
           <Text style={styles.label}>Email:</Text>

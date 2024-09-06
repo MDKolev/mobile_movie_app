@@ -74,7 +74,7 @@ const LoginScreen = () => {
       <View>
         <ImageBackground
           style={styles.image}
-          source={require("../../assets/images/background.jpg")}
+          source={require("@/assets/images/background.jpg")}
           resizeMode="cover"
         >
           <View style={styles.overlay}>
@@ -89,7 +89,7 @@ const LoginScreen = () => {
             >
               <Text style={styles.buttonText}>Sign in with your </Text>
               <Image
-                source={require("../../assets/images/google_logo.png")}
+                source={require("@/assets/images/google_logo.png")}
                 style={styles.buttonImage}
               />
               <Text style={styles.buttonText}> account</Text>
