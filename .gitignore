@@ -13,6 +13,7 @@ web-build/
 credentials.json
 eas.json 
 .idea
+firebaseConfig.ts
 
 # macOS
 .DS_Store
