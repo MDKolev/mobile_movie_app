@@ -13,10 +13,9 @@ import {
 } from "react-native";
 import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import messaging from '@react-native-firebase/messaging'; 
 
 const LoginScreen = () => {
-  // 73835811828-1ih1iigdobq9qsoecmb33egdee2kmgus.apps.googleusercontent.com
-
   const [userInfo, setUserInfo] = useState(null);
   const router = useRouter();
 
@@ -27,38 +26,64 @@ const LoginScreen = () => {
 
   useEffect(() => {
     handleSignInWithGoogle();
-  }, [response])
+  }, [response]);
+
+  const getFcmToken = async () => {
+    try {
+      await messaging().requestPermission();
+      const token = await messaging().getToken();
+      return token;
+    } catch (error) {
+      console.error('Error fetching FCM token:', error);
+      return null;
+    }
+  };
 
   const handleSignInWithGoogle = async () => {
     const user = await AsyncStorage.getItem("@user");
 
     if (!user) {
       if (response?.type === "success") {
-        await getUserInfo(response.authentication?.accessToken);
-        router.push("/screens/MoviesList");
+        const token = response.authentication?.accessToken;
+        if (token) {
+          await getUserInfo(token);
+          router.push("/screens/MoviesList");
+        }
       }
-      console.log(user);
-      
     } else {
       setUserInfo(JSON.parse(user));
     }
   };
 
-  const getUserInfo = async (token: any) => {
+  const getUserInfo = async (token: string) => {
     if (!token) return;
 
     try {
-      const response = await fetch(
+      const userResponse = await fetch(
         "https://www.googleapis.com/userinfo/v2/me",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      const user = await response.json();
+      const user = await userResponse.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
-      console.log(user);
       setUserInfo(user);
+
+      const fcmToken = await getFcmToken();
+
+      await fetch('http://localhost:8000/api/google-users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          googleUser: user,
+          fcmToken: fcmToken
+        }),
+      });
+
+      console.log('User and FCM token successfully sent to the backend');
     } catch (e) {
       console.log(e);
     }
@@ -78,7 +103,6 @@ const LoginScreen = () => {
           resizeMode="cover"
         >
           <View style={styles.overlay}>
-            {/* Centered text */}
             <Text style={styles.text}>
               Watch your favourite movies {"\n"}
               <Text style={styles.textSecondary}>Anywhere, anytime</Text>
@@ -169,4 +193,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 });
+
 export default LoginScreen;
